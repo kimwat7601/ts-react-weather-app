@@ -9,7 +9,7 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   // 共通設定: 無視するファイル
-  { ignores: ['*.json', 'dist', 'node_modules', '.git', 'coverage'] },
+  { ignores: ['*.md', '*.markdown', '*.json', 'dist', 'node_modules', '.git', 'coverage'] },
   // JS/TS共通の基本設定
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
@@ -59,10 +59,7 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
     },
@@ -81,5 +78,5 @@ export default tseslint.config(
         },
       ],
     },
-  },
+  }
 );
