@@ -1,4 +1,4 @@
-// eslint.config.js - 修正版
+// eslint.config.js
 import js from '@eslint/js';
 import globals from 'globals';
 import reactPlugin from 'eslint-plugin-react';
@@ -7,16 +7,12 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import prettierPlugin from 'eslint-plugin-prettier';
 import tseslint from 'typescript-eslint';
 
-export default [
-  // 無視するファイル
+export default tseslint.config(
+  // 共通設定: 無視するファイル
+  { ignores: ['*.md', '*.markdown', '*.json', 'dist', 'node_modules', '.git', 'coverage'] },
+  // JS/TS共通の基本設定
   {
-    ignores: ['*.md', '*.markdown', '*.json', 'dist', 'node_modules', '.git', 'coverage'],
-  },
-
-  // JavaScript の基本設定
-  {
-    files: ['**/*.{js,jsx}'],
-    ...js.configs.recommended,
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
@@ -37,39 +33,18 @@ export default [
       'no-unused-vars': 'warn',
     },
   },
-
-  // TypeScript の設定
+  // TypeScript固有の設定
   {
     files: ['**/*.{ts,tsx}'],
-    languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        ecmaVersion: 2022,
-        sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-    },
-    plugins: {
-      '@typescript-eslint': tseslint.plugin,
-    },
+    ...tseslint.configs.recommended,
     rules: {
-      ...tseslint.configs.recommended.rules,
+      // TypeScript特有のルール
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      // no-unused-vars のベースルールを無効化（TypeScript版を使用）
-      'no-unused-vars': 'off',
     },
   },
-
-  // React の設定
+  // React関連の設定
   {
     files: ['**/*.{jsx,tsx}'],
     plugins: {
@@ -83,22 +58,13 @@ export default [
       },
     },
     rules: {
-      // React Hook のルール
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-
-      // React Refresh のルール
+      ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-
-      // React の基本ルール
-      'react/react-in-jsx-scope': 'off', // React 17+ では不要
-      'react/prop-types': 'off', // TypeScript使用時は不要
-      'react/jsx-uses-react': 'error',
-      'react/jsx-uses-vars': 'error',
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
     },
   },
-
-  // Prettier の設定
+  // Prettier連携の設定
   {
     files: ['**/*.{js,jsx,ts,tsx,json,css,scss,md}'],
     plugins: {
@@ -109,12 +75,8 @@ export default [
         'error',
         {
           singleQuote: true,
-          semi: true,
-          tabWidth: 2,
-          trailingComma: 'es5',
-          printWidth: 100,
         },
       ],
     },
-  },
-];
+  }
+);

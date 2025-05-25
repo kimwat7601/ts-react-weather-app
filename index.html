@@ -1,13 +1,60 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja_JP">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>天気予報アプリ ダッシュボード</title>
+    <meta
+      name="description"
+      content="Javascript実習用の天気予報アプリダッシュボード画面です。都市ごとの天気を検索したり、3時間ごとの天気を5日間確認することができます。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+
+    <meta property="og:title" content="天気予報アプリ ダッシュボード" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:description"
+      content="Javascript実習用の天気予報アプリダッシュボード画面です。都市ごとの天気を検索したり、3時間ごとの天気を5日間確認することができます。"
+    />
+    <meta property="og:image" content="/assets/images/ogp.png" />
+    <meta property="og:image:alt" content="天気予報アプリ ダッシュボード" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:site_name" content="Reactチャレンジ" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:url" content="https://mywebsite.com/page" />
   </head>
   <body>
-    <div id="root"></div>
+    <div class="contents-wrap">
+      <div class="contents-wrap__inner">
+        <!--================= Header Start =================-->
+        <header class="header-app">
+          <h1 class="heading-screen">天気予報アプリ ダッシュボード</h1>
+        </header>
+        <!--================= Header End =================-->
+        <!--================= Main Contents Start =================-->
+        <main role="main">
+          <div id="root"></div>
+        </main>
+        <!--================= Main Contents End =================-->
+        <!--================= Footer Start =================-->
+        <footer class="footer-app">
+          <p class="copyright">
+            <a href="http://www.freepik.com" target="_blank" class="text-link"
+              >Designed by macrovector / Freepik</a
+            >
+          </p>
+        </footer>
+        <!--================= Footer End =================-->
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
