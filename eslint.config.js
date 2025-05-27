@@ -8,9 +8,23 @@ import prettierPlugin from 'eslint-plugin-prettier';
 import tseslint from 'typescript-eslint';
 
 export default [
-  // 無視するファイル
+  // 無視するファイル（グローバル設定）
   {
-    ignores: ['*.md', '*.markdown', '*.json', 'dist', 'node_modules', '.git', 'coverage'],
+    ignores: [
+      '**/*.md',
+      '**/*.markdown',
+      '**/*.txt',
+      '**/docs/**',
+      'dist/**',
+      'build/**',
+      'node_modules/**',
+      '.git/**',
+      'coverage/**',
+      '*.log',
+      '.env*',
+      'public/**',
+      'package.json',
+    ],
   },
 
   // JavaScript の基本設定
@@ -63,7 +77,14 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
       // no-unused-vars のベースルールを無効化（TypeScript版を使用）
       'no-unused-vars': 'off',
     },
@@ -98,9 +119,9 @@ export default [
     },
   },
 
-  // Prettier の設定
+  // Prettier の設定（Markdownを除外）
   {
-    files: ['**/*.{js,jsx,ts,tsx,json,css,scss,md}'],
+    files: ['**/*.{js,jsx,ts,tsx,json,css,scss}'], // md を削除
     plugins: {
       prettier: prettierPlugin,
     },
