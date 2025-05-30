@@ -3,18 +3,28 @@ import ForcastWeatherItem from '@/components/weather/ForcastWeatherItem';
 import { type ForecastWeatherData } from '@/types/types';
 import TabDays from '@/components/weather/TabDays';
 import { calcMonthendDate } from '@/utils/utilitys';
+import LoadingBox from '@/components/common/Loading';
 
 type ForecastWeatherProps = {
   data: ForecastWeatherData[][] | null;
+  isLoading: boolean;
 };
 
-const ForecastWeatherList: FC<ForecastWeatherProps> = ({ data }) => {
+const ForecastWeatherList: FC<ForecastWeatherProps> = ({ data, isLoading }) => {
   const [activeTab, setActiveTab] = useState(0);
 
   if (!data) {
     return (
       <section className="forecast-weather-area empty">
         <p className="forecast-weather-texxt">都市名を検索して天気を表示します</p>
+      </section>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <section className="cur-weather-area">
+        <LoadingBox />
       </section>
     );
   }

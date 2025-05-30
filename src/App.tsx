@@ -12,11 +12,17 @@ import {
 import setCurrentWeatherInfo from '@/processor/setCurrentWeatherData';
 import { setDaysData } from '@/processor/setForecastWeatherData';
 
+const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
+
 const App = () => {
   const [weatherData, setWeatherData] = useState<CurrentWeatherData | null>(null);
   const [forecastData, setForecastData] = useState<ForecastWeatherData[][] | null>(null);
+  const [isCureentLoading, setIsCurrentLoading] = useState(false);
+  const [isForecastLoading, setIsForecastLoading] = useState(false);
 
   const handleSearch = async (inputValue: string) => {
+    setIsCurrentLoading(true);
+    sleep(2000);
     const currentData = await fetchData<CurrentWeatherFetchData>(
       inputValue,
       import.meta.env['VITE_OPEN_WEATHER_API_KEY'],
@@ -24,6 +30,10 @@ const App = () => {
     );
     const newWeatherData: CurrentWeatherData = currentData && setCurrentWeatherInfo(currentData);
     setWeatherData(newWeatherData);
+    setIsCurrentLoading(false);
+
+    setIsForecastLoading(true);
+    sleep(2000);
     const forecastWeatherdata = await fetchData<ForecastWeatherFetchData>(
       inputValue,
       import.meta.env['VITE_OPEN_WEATHER_API_KEY'],
@@ -32,6 +42,7 @@ const App = () => {
     const newForecastData: ForecastWeatherData[][] =
       forecastWeatherdata && setDaysData(forecastWeatherdata);
     setForecastData(newForecastData);
+    setIsForecastLoading(false);
   };
 
   return (
@@ -40,8 +51,8 @@ const App = () => {
         <SearchForm handleSearch={handleSearch} />
       </section>
       <section className="dashboard-body">
-        <CurrentWeather data={weatherData} />
-        <ForecastWeatherList data={forecastData} />
+        <CurrentWeather data={weatherData} isLoading={isCureentLoading} />
+        <ForecastWeatherList data={forecastData} isLoading={isForecastLoading} />
       </section>
     </>
   );

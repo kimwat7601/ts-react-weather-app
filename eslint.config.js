@@ -120,22 +120,22 @@ export default [
   },
 
   // Prettier の設定（Markdownを除外）
-  {
-    files: ['**/*.{js,jsx,ts,tsx,json,css,scss}'], // md を削除
-    plugins: {
-      prettier: prettierPlugin,
-    },
-    rules: {
-      'prettier/prettier': [
-        'error',
-        {
-          singleQuote: true,
-          semi: true,
-          tabWidth: 2,
-          trailingComma: 'es5',
-          printWidth: 100,
-        },
-      ],
-    },
-  },
+  // {
+  //   files: ['**/*.{js,jsx,ts,tsx,json,css,scss}'], // md を削除
+  //   plugins: {
+  //     prettier: prettierPlugin,
+  //   },
+  //   rules: {
+  //     'prettier/prettier': [
+  //       'error',
+  //       {
+  //         singleQuote: true,
+  //         semi: true,
+  //         tabWidth: 2,
+  //         trailingComma: 'es5',
+  //         printWidth: 100,
+  //       },
+  //     ],
+  //   },
+  // },
 ];
