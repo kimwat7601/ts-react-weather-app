@@ -1,20 +1,15 @@
 import { type FC } from 'react';
 import { type CurrentWeatherData } from '@/types/types';
-import LoadingBox from '../common/Loading';
+import LoadingBox from '@/components/common/Loading';
+import Error from '@/components/common/Error';
 
 type CurrentWeatherProps = {
   data: CurrentWeatherData | null;
   isLoading: boolean;
+  error: string;
 };
 
-const CurrentWeather: FC<CurrentWeatherProps> = ({ data, isLoading }) => {
-  if (!data) {
-    return (
-      <section className="cur-weather-area cur-weather-area--empty">
-        <p className="cur-weather-area__placeholder">都市名を検索して天気を表示します</p>
-      </section>
-    );
-  }
+const CurrentWeather: FC<CurrentWeatherProps> = ({ data, isLoading, error }) => {
   if (isLoading) {
     return (
       <section className="cur-weather-area">
@@ -22,6 +17,22 @@ const CurrentWeather: FC<CurrentWeatherProps> = ({ data, isLoading }) => {
       </section>
     );
   }
+  if (error) {
+    return (
+      <section className="cur-weather-area">
+        <Error>{error}</Error>
+      </section>
+    );
+  }
+
+  if (!data) {
+    return (
+      <section className="cur-weather-area cur-weather-area--empty">
+        <p className="cur-weather-area__placeholder">都市名を検索して天気を表示します</p>
+      </section>
+    );
+  }
+
   return (
     <section className="cur-weather-area">
       <p className="cur-weather-area__city-text">{data.city}</p>

@@ -19,29 +19,49 @@ const App = () => {
   const [forecastData, setForecastData] = useState<ForecastWeatherData[][] | null>(null);
   const [isCureentLoading, setIsCurrentLoading] = useState(false);
   const [isForecastLoading, setIsForecastLoading] = useState(false);
+  const [cureentError, setCureentError] = useState('');
+  const [forecastError, setForecastError] = useState('');
 
   const handleSearch = async (inputValue: string) => {
     setIsCurrentLoading(true);
     sleep(2000);
-    const currentData = await fetchData<CurrentWeatherFetchData>(
-      inputValue,
-      import.meta.env['VITE_OPEN_WEATHER_API_KEY'],
-      'weather'
-    );
-    const newWeatherData: CurrentWeatherData = currentData && setCurrentWeatherInfo(currentData);
-    setWeatherData(newWeatherData);
+    try {
+      const currentData = await fetchData<CurrentWeatherFetchData>(
+        inputValue,
+        import.meta.env['VITE_OPEN_WEATHER_API_KEY'],
+        'weather'
+      );
+      const newWeatherData: CurrentWeatherData = currentData && setCurrentWeatherInfo(currentData);
+      setWeatherData(newWeatherData);
+      setCureentError('');
+    } catch (error) {
+      if (error instanceof Error) {
+        setCureentError(error.message);
+      } else {
+        setCureentError('An unknown error occurred');
+      }
+    }
     setIsCurrentLoading(false);
 
     setIsForecastLoading(true);
     sleep(2000);
-    const forecastWeatherdata = await fetchData<ForecastWeatherFetchData>(
-      inputValue,
-      import.meta.env['VITE_OPEN_WEATHER_API_KEY'],
-      'forecast'
-    );
-    const newForecastData: ForecastWeatherData[][] =
-      forecastWeatherdata && setDaysData(forecastWeatherdata);
-    setForecastData(newForecastData);
+    try {
+      const forecastWeatherdata = await fetchData<ForecastWeatherFetchData>(
+        inputValue,
+        import.meta.env['VITE_OPEN_WEATHER_API_KEY'],
+        'forecast'
+      );
+      const newForecastData: ForecastWeatherData[][] =
+        forecastWeatherdata && setDaysData(forecastWeatherdata);
+      setForecastData(newForecastData);
+      setForecastError('');
+    } catch (error) {
+      if (error instanceof Error) {
+        setForecastError(error.message);
+      } else {
+        setForecastError('An unknown error occurred');
+      }
+    }
     setIsForecastLoading(false);
   };
 
@@ -51,8 +71,12 @@ const App = () => {
         <SearchForm handleSearch={handleSearch} />
       </section>
       <section className="dashboard-body">
-        <CurrentWeather data={weatherData} isLoading={isCureentLoading} />
-        <ForecastWeatherList data={forecastData} isLoading={isForecastLoading} />
+        <CurrentWeather data={weatherData} isLoading={isCureentLoading} error={cureentError} />
+        <ForecastWeatherList
+          data={forecastData}
+          isLoading={isForecastLoading}
+          error={forecastError}
+        />
       </section>
     </>
   );
