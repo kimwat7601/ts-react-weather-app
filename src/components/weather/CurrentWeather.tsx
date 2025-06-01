@@ -28,7 +28,7 @@ const CurrentWeather: FC<CurrentWeatherProps> = ({ data, isLoading, error }) => 
   if (!data) {
     return (
       <section className="cur-weather-area cur-weather-area--empty">
-        <p className="cur-weather-area__placeholder">都市名を検索して天気を表示します</p>
+        <p className="cur-weather-text">都市名を検索して天気を表示します</p>
       </section>
     );
   }

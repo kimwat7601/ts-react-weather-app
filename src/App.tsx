@@ -12,7 +12,7 @@ import {
 import setCurrentWeatherInfo from '@/processor/setCurrentWeatherData';
 import { setDaysData } from '@/processor/setForecastWeatherData';
 
-const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
+// const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
 
 const App = () => {
   const [weatherData, setWeatherData] = useState<CurrentWeatherData | null>(null);
@@ -24,7 +24,7 @@ const App = () => {
 
   const handleSearch = async (inputValue: string) => {
     setIsCurrentLoading(true);
-    sleep(2000);
+    // sleep(2000);
     try {
       const currentData = await fetchData<CurrentWeatherFetchData>(
         inputValue,
@@ -44,7 +44,7 @@ const App = () => {
     setIsCurrentLoading(false);
 
     setIsForecastLoading(true);
-    sleep(2000);
+    // sleep(2000);
     try {
       const forecastWeatherdata = await fetchData<ForecastWeatherFetchData>(
         inputValue,

@@ -17,7 +17,7 @@ const ForecastWeatherList: FC<ForecastWeatherProps> = ({ data, isLoading, error 
 
   if (isLoading) {
     return (
-      <section className="cur-weather-area">
+      <section className="forecast-weather-area">
         <LoadingBox />
       </section>
     );
@@ -25,7 +25,7 @@ const ForecastWeatherList: FC<ForecastWeatherProps> = ({ data, isLoading, error 
 
   if (error) {
     return (
-      <section className="cur-weather-area">
+      <section className="forecast-weather-area">
         <Error>{error}</Error>
       </section>
     );
@@ -33,8 +33,8 @@ const ForecastWeatherList: FC<ForecastWeatherProps> = ({ data, isLoading, error 
 
   if (!data) {
     return (
-      <section className="forecast-weather-area empty">
-        <p className="forecast-weather-texxt">都市名を検索して天気を表示します</p>
+      <section className="forecast-weather-area forecast-weather-area--empty">
+        <p className="forecast-weather-text">都市名を検索して天気を表示します</p>
       </section>
     );
   }
