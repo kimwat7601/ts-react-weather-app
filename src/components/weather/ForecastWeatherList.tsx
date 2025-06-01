@@ -4,27 +4,37 @@ import { type ForecastWeatherData } from '@/types/types';
 import TabDays from '@/components/weather/TabDays';
 import { calcMonthendDate } from '@/utils/utilitys';
 import LoadingBox from '@/components/common/Loading';
+import Error from '@/components/common/Error';
 
 type ForecastWeatherProps = {
   data: ForecastWeatherData[][] | null;
   isLoading: boolean;
+  error: string;
 };
 
-const ForecastWeatherList: FC<ForecastWeatherProps> = ({ data, isLoading }) => {
+const ForecastWeatherList: FC<ForecastWeatherProps> = ({ data, isLoading, error }) => {
   const [activeTab, setActiveTab] = useState(0);
 
-  if (!data) {
+  if (isLoading) {
     return (
-      <section className="forecast-weather-area empty">
-        <p className="forecast-weather-texxt">都市名を検索して天気を表示します</p>
+      <section className="forecast-weather-area">
+        <LoadingBox />
       </section>
     );
   }
 
-  if (isLoading) {
+  if (error) {
     return (
-      <section className="cur-weather-area">
-        <LoadingBox />
+      <section className="forecast-weather-area">
+        <Error>{error}</Error>
+      </section>
+    );
+  }
+
+  if (!data) {
+    return (
+      <section className="forecast-weather-area forecast-weather-area--empty">
+        <p className="forecast-weather-text">都市名を検索して天気を表示します</p>
       </section>
     );
   }
