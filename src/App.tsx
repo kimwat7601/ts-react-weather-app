@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import SearchForm from '@/components/weather/SearchForm';
 import CurrentWeather from '@/components/weather/CurrentWeather';
 import ForecastWeatherList from '@/components/weather/ForecastWeatherList';
@@ -23,9 +23,9 @@ const App = () => {
   const [forecastError, setForecastError] = useState('');
   const [searchCity, setSearchCity] = useState('');
 
-  const handleSearch = (inputValue: string) => {
+  const handleSearch = useCallback((inputValue: string) => {
     setSearchCity(inputValue);
-  };
+  }, []);
 
   useEffect(() => {
     if (!searchCity.trim()) return;
