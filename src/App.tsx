@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import SearchForm from '@/components/weather/SearchForm';
 import CurrentWeather from '@/components/weather/CurrentWeather';
 import ForecastWeatherList from '@/components/weather/ForecastWeatherList';
@@ -17,18 +17,21 @@ import { setDaysData } from '@/processor/setForecastWeatherData';
 const App = () => {
   const [weatherData, setWeatherData] = useState<CurrentWeatherData | null>(null);
   const [forecastData, setForecastData] = useState<ForecastWeatherData[][] | null>(null);
-  const [isCureentLoading, setIsCurrentLoading] = useState(false);
+  const [isCurrentLoading, setIsCurrentLoading] = useState(false);
   const [isForecastLoading, setIsForecastLoading] = useState(false);
   const [currentError, setCurrentError] = useState('');
   const [forecastError, setForecastError] = useState('');
   const [searchCity, setSearchCity] = useState('');
 
-  const handleSearch = (inputValue: string) => {
+  const handleSearch = useCallback((inputValue: string) => {
     setSearchCity(inputValue);
-  };
+  }, []);
 
   useEffect(() => {
     if (!searchCity.trim()) return;
+
+    const controller = new AbortController();
+    const signal = controller.signal;
 
     const fetchCurrentWeather = async () => {
       setIsCurrentLoading(true);
@@ -37,12 +40,16 @@ const App = () => {
         const currentData = await fetchData<CurrentWeatherFetchData>(
           searchCity,
           import.meta.env['VITE_OPEN_WEATHER_API_KEY'],
-          'weather'
+          'weather',
+          { signal: signal }
         );
         const newWeatherData: CurrentWeatherData =
           currentData && setCurrentWeatherInfo(currentData);
         setWeatherData(newWeatherData);
       } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') {
+          return;
+        }
         if (error instanceof Error) {
           setCurrentError(error.message);
         } else {
@@ -53,10 +60,17 @@ const App = () => {
       }
     };
     fetchCurrentWeather();
+
+    return () => {
+      controller.abort();
+    };
   }, [searchCity]);
 
   useEffect(() => {
     if (!searchCity.trim()) return;
+
+    const controller = new AbortController();
+    const signal = controller.signal;
 
     const fetchForecastWeather = async () => {
       setIsForecastLoading(true);
@@ -65,12 +79,16 @@ const App = () => {
         const forecastWeatherdata = await fetchData<ForecastWeatherFetchData>(
           searchCity,
           import.meta.env['VITE_OPEN_WEATHER_API_KEY'],
-          'forecast'
+          'forecast',
+          { signal: signal }
         );
         const newForecastData: ForecastWeatherData[][] =
           forecastWeatherdata && setDaysData(forecastWeatherdata);
         setForecastData(newForecastData);
       } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') {
+          return;
+        }
         if (error instanceof Error) {
           setForecastError(error.message);
         } else {
@@ -81,6 +99,9 @@ const App = () => {
       }
     };
     fetchForecastWeather();
+    return () => {
+      controller.abort();
+    };
   }, [searchCity]);
 
   return (
@@ -89,7 +110,7 @@ const App = () => {
         <SearchForm handleSearch={handleSearch} />
       </section>
       <section className="dashboard-body">
-        <CurrentWeather data={weatherData} isLoading={isCureentLoading} error={currentError} />
+        <CurrentWeather data={weatherData} isLoading={isCurrentLoading} error={currentError} />
         <ForecastWeatherList
           data={forecastData}
           isLoading={isForecastLoading}
