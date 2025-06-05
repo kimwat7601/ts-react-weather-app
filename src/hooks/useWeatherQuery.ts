@@ -81,11 +81,11 @@ const useWeatherData = (city: string) => {
   const currentWeather = useCurrentWeather(city);
   const forecastWeather = useForecastWeather(city);
   return {
-    currentWeather: currentWeather.data,
-    isCurrenttLoading: currentWeather.isLoading,
+    currentWeatherData: currentWeather.data,
+    isCurrentLoading: currentWeather.isLoading,
     currentError: currentWeather.error,
 
-    forecastWeather: forecastWeather.data,
+    forecastWeatherData: forecastWeather.data,
     isForecastLoading: forecastWeather.isLoading,
     forecastError: forecastWeather.error,
 
@@ -105,4 +105,4 @@ const useWeatherData = (city: string) => {
   };
 };
 
-export { useCurrentWeather, useForecastWeather, useWeatherData };
+export { weatherQueryKey, useCurrentWeather, useForecastWeather, useWeatherData };
