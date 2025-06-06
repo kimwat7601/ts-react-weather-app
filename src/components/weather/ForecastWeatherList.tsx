@@ -7,7 +7,7 @@ import LoadingBox from '@/components/common/Loading';
 import Error from '@/components/common/Error';
 
 type ForecastWeatherProps = {
-  data: ForecastWeatherData[][] | null;
+  data: ForecastWeatherData[][] | undefined;
   isLoading: boolean;
   error: string;
 };
