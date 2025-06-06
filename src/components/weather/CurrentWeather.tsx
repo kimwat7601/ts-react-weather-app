@@ -4,7 +4,7 @@ import LoadingBox from '@/components/common/Loading';
 import Error from '@/components/common/Error';
 
 type CurrentWeatherProps = {
-  data: CurrentWeatherData | null;
+  data: CurrentWeatherData | undefined;
   isLoading: boolean;
   error: string;
 };
