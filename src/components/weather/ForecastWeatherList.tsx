@@ -52,6 +52,8 @@ const ForecastWeatherList: FC<ForecastWeatherProps> = ({ data, isLoading, error 
     return days;
   };
 
+  const dayTabs = showDayTabs(data);
+
   return (
     <section className="forecast-weather-area">
       <ul className="tab-area">
@@ -60,22 +62,25 @@ const ForecastWeatherList: FC<ForecastWeatherProps> = ({ data, isLoading, error 
             <TabDays
               dayNum={dayNum}
               isActive={index === activeTab}
-              key={index}
+              key={`day-${dayNum}`}
               onClick={() => setActiveTab(index)}
             />
           );
         })}
       </ul>
       <div className="tab-contents-wrap">
-        {data.map((dayData, index) => {
+        {data.map((dayData, dayIndex) => {
+          const dayNum = dayTabs[dayIndex];
+          const dateKey = `day-${dayNum}`;
           return (
             <div
-              className={`tab-contents ${index === activeTab ? 'tab-contents--is-active' : ''}`}
-              key={index}
+              className={`tab-contents ${dayIndex === activeTab ? 'tab-contents--is-active' : ''}`}
+              key={dateKey}
             >
               <ul className="forecast-weather-list">
-                {dayData.map((hourData, index) => {
-                  return <ForcastWeatherItem data={hourData} key={index} />;
+                {dayData.map((hourData, hourIndex) => {
+                  const timeKey = `${dateKey}-hour-${hourIndex}`;
+                  return <ForcastWeatherItem data={hourData} key={timeKey} />;
                 })}
               </ul>
             </div>
