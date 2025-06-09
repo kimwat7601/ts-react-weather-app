@@ -16,15 +16,18 @@ const weatherQueryKey = {
 };
 
 const useCurrentWeatherSuspense = (city: string) => {
+  console.log('🌤️ [Suspense] Setting up current weather query for:', city);
   return useSuspenseQuery({
     queryKey: weatherQueryKey.current(city),
     queryFn: async (): Promise<CurrentWeatherData> => {
+      console.log('🌤️ [Suspense] Fetching current weather for:', city);
       const currentData = await fetchData<CurrentWeatherFetchData>(
         city,
         import.meta.env['VITE_OPEN_WEATHER_API_KEY'],
         'weather'
       );
       const newWeatherData: CurrentWeatherData = currentData && setCurrentWeatherInfo(currentData);
+      console.log('✅ [Suspense] Current weather data processed:', newWeatherData);
       return newWeatherData;
     },
     // enabled: !!city.trim(),
@@ -42,9 +45,11 @@ const useCurrentWeatherSuspense = (city: string) => {
 };
 
 const useForecastWeatherSuspense = (city: string) => {
+  console.log('📅 [Suspense] Setting up forecast weather query for:', city);
   return useSuspenseQuery({
     queryKey: weatherQueryKey.forecast(city),
     queryFn: async (): Promise<ForecastWeatherData[][]> => {
+      console.log('📅 [Suspense] Fetching forecast weather for:', city);
       const forecastWeatherData = await fetchData<ForecastWeatherFetchData>(
         city,
         import.meta.env['VITE_OPEN_WEATHER_API_KEY'],
@@ -53,6 +58,7 @@ const useForecastWeatherSuspense = (city: string) => {
 
       const newForecastData: ForecastWeatherData[][] =
         forecastWeatherData && setDaysData(forecastWeatherData);
+      console.log('✅ [Suspense] Forecast weather data processed:', newForecastData);
       return newForecastData;
     },
     staleTime: 5 * 60 * 1000,

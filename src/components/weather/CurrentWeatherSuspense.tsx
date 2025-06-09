@@ -9,7 +9,11 @@ type CurrentWeatherSuspenseProps = {
 };
 
 const CurrentWeatherSuspense: FC<CurrentWeatherSuspenseProps> = ({ city }) => {
+  console.log('🎨 [CurrentWeatherSuspense] Rendering for city:', city);
+
   const { data } = useCurrentWeatherSuspense(city);
+
+  console.log('🎨 [CurrentWeatherSuspense] Data received:', data);
 
   return (
     <section className="cur-weather-area">

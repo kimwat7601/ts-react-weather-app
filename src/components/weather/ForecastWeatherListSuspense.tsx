@@ -12,8 +12,12 @@ type ForecastWeatherSuspenseProps = {
 };
 
 const ForecastWeatherListSuspense: FC<ForecastWeatherSuspenseProps> = ({ city }) => {
+  console.log('📅 [ForecastWeatherListSuspense] Rendering for city:', city);
+
   const { data } = useForecastWeatherSuspense(city);
   const [activeTab, setActiveTab] = useState(0);
+
+  console.log('📅 [ForecastWeatherListSuspense] Data received:', data);
 
   const showDayTabs = (data: ForecastWeatherData[][]) => {
     // console.log('data:', data);
