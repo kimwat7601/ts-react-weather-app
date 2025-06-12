@@ -208,6 +208,7 @@ const WeatherErrorFallback: FC<WeatherErrorFallbackProps> = ({
             marginTop: '20px',
             padding: '10px',
             backgroundColor: 'rgba(0,0,0,0.05)',
+            color: '#333',
             borderRadius: '4px',
             fontSize: '12px',
             textAlign: 'left',

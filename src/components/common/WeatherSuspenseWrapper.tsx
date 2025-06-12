@@ -23,8 +23,12 @@ interface WeatherSuspenseWrapperProps {
   debugLabel?: string;
   enableDebugLog?: boolean;
 
+  // エラー回復設定
+  resetOnPropsChange?: boolean;
+  resetTrigger?: string | number;
+
   // パフォーマンス設定
-  timeout?: number;
+  // timeout?: number;
 }
 
 const WeatherSuspenseWrapper = ({
@@ -38,12 +42,14 @@ const WeatherSuspenseWrapper = ({
   customErrorFallback: CustomErrorFallback,
   debugLabel = 'WeatherSuspenseWrapper',
   enableDebugLog = false,
+  resetOnPropsChange = true,
+  resetTrigger,
   //timeout, 将来的に使用する
 }: WeatherSuspenseWrapperProps) => {
   // エラーハンドリング
   const handleError = (error: Error, errorInfo: ErrorInfo) => {
     const timestamp = new Date().toISOString();
-    const errorId = `${debugLabel}--${Date.now()}`;
+    const errorId = `${debugLabel}-${Date.now()}`;
 
     if (enableDebugLog || import.meta.env.DEV) {
       console.group(`🚨 [${debugLabel}] Weather Error - ${timestamp}`);
@@ -51,6 +57,7 @@ const WeatherSuspenseWrapper = ({
       console.error('Error:', error);
       console.error('Component Stack:', errorInfo.componentStack);
       console.error('Wrapper Type:', type);
+      console.error('Reset Trigger:', resetTrigger);
       console.groupEnd();
     }
 
@@ -66,7 +73,7 @@ const WeatherSuspenseWrapper = ({
   // リセット時の処理
   const handleReset = () => {
     if (enableDebugLog || import.meta.env.DEV) {
-      console.log(`🔄 [${debugLabel}] Error boundary reset`);
+      console.log(`🔄 [${debugLabel}] Error boundary reset - Trigger: ${resetTrigger}`);
     }
     // 必要に応じてクリーンアップ処理
   };
@@ -84,17 +91,29 @@ const WeatherSuspenseWrapper = ({
   // エラーフォールバック
   const ErrorFallbackComponent = CustomErrorFallback || WeatherErrorFallback;
 
+  // resetKeys に resetTrigger を含める
+  const resetKeys =
+    resetOnPropsChange && resetTrigger !== undefined
+      ? [debugLabel, type, resetTrigger]
+      : [debugLabel, type];
+
+  // 🔧 デバッグログ追加
+  if (enableDebugLog || import.meta.env.DEV) {
+    console.log(`🔧 [${debugLabel}] Reset Keys:`, resetKeys);
+  }
+
   return (
-    <div
-      className={`weather-suspense-wrapper weather-suspense-wrapper--${type}`}
-      data-debug-label={debugLabel}
-      data-type={type}
-    >
+    // <div
+    //   className={`weather-suspense-wrapper weather-suspense-wrapper--${type}`}
+    //   data-debug-label={debugLabel}
+    //   data-type={type}
+    // >
+    <>
       <ErrorBoundary
         FallbackComponent={(props) => <ErrorFallbackComponent {...props} errorType={type} />}
         onError={handleError}
         onReset={handleReset}
-        resetKeys={[debugLabel, type]}
+        resetKeys={resetKeys}
       >
         <Suspense fallback={LoadingFallback}>{children}</Suspense>
       </ErrorBoundary>
@@ -103,7 +122,7 @@ const WeatherSuspenseWrapper = ({
       {import.meta.env.DEV && enableDebugLog && (
         <div
           style={{
-            position: 'absolute',
+            position: 'fixed',
             top: '5px',
             right: '5px',
             background: 'rgba(0,0,0,0.7)',
@@ -116,9 +135,13 @@ const WeatherSuspenseWrapper = ({
           }}
         >
           🛡️ {debugLabel}
+          <br />
+          Trigger: ({resetTrigger})<br />
+          Reset: {resetOnPropsChange ? 'On' : 'Off'}
         </div>
       )}
-    </div>
+    </>
+    // </div>
   );
 };
 
@@ -138,7 +161,7 @@ export const CurrentWeatherWrapper = ({ children, ...props }: PresetWrapperProps
   );
 };
 
-export const FrecastWeatherWrapper = ({ children, ...props }: PresetWrapperProps) => {
+export const ForecastWeatherWrapper = ({ children, ...props }: PresetWrapperProps) => {
   return (
     <WeatherSuspenseWrapper
       type="forecast"
