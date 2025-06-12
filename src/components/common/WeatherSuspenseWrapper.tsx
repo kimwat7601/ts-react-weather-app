@@ -1,8 +1,13 @@
 import { Suspense, type ReactNode, type ErrorInfo } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary, type FallbackProps } from 'react-error-boundary';
 import WeatherLoading from '@/components/common/WeatherLoading';
 import WeatherErrorFallback from '@/components/common/WeatherErrorFallback';
 
+interface WeatherErrorFallbackProps extends FallbackProps {
+  errorType: 'current' | 'forecast' | 'general';
+}
+
+type CustomErrorFallbackComponent = React.ComponentType<WeatherErrorFallbackProps>;
 interface WeatherSuspenseWrapperProps {
   children: ReactNode;
 
@@ -17,7 +22,7 @@ interface WeatherSuspenseWrapperProps {
 
   // カスタマイズ設定
   customFallback?: ReactNode;
-  customErrorFallback?: React.ComponentType<any>;
+  customErrorFallback?: CustomErrorFallbackComponent;
 
   // デバッグ設定
   debugLabel?: string;
