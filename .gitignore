@@ -33,3 +33,5 @@ dist-ssr
 # Backup files
 *.backup
 *.bak
+**/backup*/
+**/backup-*/
