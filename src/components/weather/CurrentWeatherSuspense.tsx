@@ -1,37 +1,19 @@
 import { type FC } from 'react';
-import { type CurrentWeatherData } from '@/types/types';
-import LoadingBox from '@/components/common/Loading';
-import Error from '@/components/common/Error';
+import { useCurrentWeatherSuspense } from '@/hooks/UseWeatherSuspenseQuery';
+// import { type CurrentWeatherData } from '@/types/types';
+// import LoadingBox from '@/components/common/Loading';
+// import Error from '@/components/common/Error';
 
-type CurrentWeatherProps = {
-  data: CurrentWeatherData | undefined;
-  isLoading: boolean;
-  error: string;
+type CurrentWeatherSuspenseProps = {
+  city: string;
 };
 
-const CurrentWeather: FC<CurrentWeatherProps> = ({ data, isLoading, error }) => {
-  if (isLoading) {
-    return (
-      <section className="cur-weather-area">
-        <LoadingBox />
-      </section>
-    );
-  }
-  if (error) {
-    return (
-      <section className="cur-weather-area">
-        <Error>{error}</Error>
-      </section>
-    );
-  }
+const CurrentWeatherSuspense: FC<CurrentWeatherSuspenseProps> = ({ city }) => {
+  console.log('🎨 [CurrentWeatherSuspense] Rendering for city:', city);
 
-  if (!data) {
-    return (
-      <section className="cur-weather-area cur-weather-area--empty">
-        <p className="cur-weather-text">都市名を検索して天気を表示します</p>
-      </section>
-    );
-  }
+  const { data } = useCurrentWeatherSuspense(city);
+
+  console.log('🎨 [CurrentWeatherSuspense] Data received:', data);
 
   return (
     <section className="cur-weather-area">
@@ -93,4 +75,4 @@ const CurrentWeather: FC<CurrentWeatherProps> = ({ data, isLoading, error }) => 
   );
 };
 
-export default CurrentWeather;
+export default CurrentWeatherSuspense;

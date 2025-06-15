@@ -1,43 +1,23 @@
 import { type FC, useState } from 'react';
-import ForcastWeatherItem from '@/components/weather/ForcastWeatherItem';
+import { useForecastWeatherSuspense } from '@/hooks/UseWeatherSuspenseQuery';
 import { type ForecastWeatherData } from '@/types/types';
+import ForcastWeatherItem from '@/components/weather/ForcastWeatherItem';
 import TabDays from '@/components/weather/TabDays';
 import { calcMonthendDate } from '@/utils/utilitys';
-import LoadingBox from '@/components/common/Loading';
-import Error from '@/components/common/Error';
+// import LoadingBox from '@/components/common/Loading';
+// import Error from '@/components/common/Error';
 
-type ForecastWeatherProps = {
-  data: ForecastWeatherData[][] | undefined;
-  isLoading: boolean;
-  error: string;
+type ForecastWeatherSuspenseProps = {
+  city: string;
 };
 
-const ForecastWeatherList: FC<ForecastWeatherProps> = ({ data, isLoading, error }) => {
+const ForecastWeatherListSuspense: FC<ForecastWeatherSuspenseProps> = ({ city }) => {
+  console.log('📅 [ForecastWeatherListSuspense] Rendering for city:', city);
+
+  const { data } = useForecastWeatherSuspense(city);
   const [activeTab, setActiveTab] = useState(0);
 
-  if (isLoading) {
-    return (
-      <section className="forecast-weather-area">
-        <LoadingBox />
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section className="forecast-weather-area">
-        <Error>{error}</Error>
-      </section>
-    );
-  }
-
-  if (!data) {
-    return (
-      <section className="forecast-weather-area forecast-weather-area--empty">
-        <p className="forecast-weather-text">都市名を検索して天気を表示します</p>
-      </section>
-    );
-  }
+  console.log('📅 [ForecastWeatherListSuspense] Data received:', data);
 
   const showDayTabs = (data: ForecastWeatherData[][]) => {
     // console.log('data:', data);
@@ -91,4 +71,4 @@ const ForecastWeatherList: FC<ForecastWeatherProps> = ({ data, isLoading, error 
   );
 };
 
-export default ForecastWeatherList;
+export default ForecastWeatherListSuspense;

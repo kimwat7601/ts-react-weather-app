@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*! destyle.css v4.0.1 | MIT License | https://github.com/nicolas-cusan/destyle.css */
 /* Reset box-model and set borders */
 /* ============================================ */
@@ -886,6 +887,116 @@ body {
     transform: rotate(360deg) scale(1);
   }
 }
+/* Error Test */
+/* src/styles/debug.css または既存のCSSファイルに追加 */
+/* デバッグコントロール */
+.dev-controls {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f0f8ff;
+  border: 1px dashed #007acc;
+  border-radius: 4px;
+}
+
+.debug-toggle {
+  background-color: #007acc;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.debug-toggle:hover {
+  background-color: #005a9e;
+}
+
+/* エラーテストパネル */
+.error-test-panel {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  color: #333;
+}
+
+.error-test-panel h3 {
+  margin-top: 0;
+  color: #856404;
+}
+
+.test-buttons {
+  margin: 20px 0;
+}
+
+.test-buttons h4 {
+  margin: 20px 0 10px 0;
+  color: #495057;
+}
+
+.error-button {
+  margin: 5px 10px 5px 0;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.error-button.danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.error-button.danger:hover {
+  background-color: #c82333;
+  -webkit-transform: translateY(-1px);
+  transform: translateY(-1px);
+}
+
+.error-button.warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.error-button.warning:hover {
+  background-color: #e0a800;
+  -webkit-transform: translateY(-1px);
+  transform: translateY(-1px);
+}
+
+.test-info {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #e7f3ff;
+  border-left: 4px solid #007acc;
+  border-radius: 4px;
+}
+
+.test-info h4 {
+  margin-top: 0;
+  color: #007acc;
+}
+
+.test-info ul {
+  margin: 10px 0;
+}
+
+.test-info li {
+  margin: 5px 0;
+}
+
+/* デバッグセクション */
+.debug-section {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px dashed #ccc;
+}
+
 @media print, screen and (min-width: 897px) {
   /* ===========================================
   * Each Component
