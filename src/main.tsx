@@ -4,6 +4,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ErrorBoundary } from 'react-error-boundary';
 import App from '@/App.tsx';
+import {
+  isLayoutShiftEntry,
+  isFirstInputEntry,
+  // isLargestContentfulPaintEntry,
+  // type LayoutShiftEntry
+} from '@/types/performance-types';
 
 // 🆕 Phase 4: グローバルエラーフォールバック
 const GlobalErrorFallback = ({
@@ -139,8 +145,10 @@ const monitorCoreWebVitals = () => {
     let clsValue = 0;
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        if (!(entry as any).hadRecentInput) {
-          clsValue += (entry as any).value;
+        if (isLayoutShiftEntry(entry)) {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+          }
         }
       }
 
@@ -167,17 +175,17 @@ const monitorCoreWebVitals = () => {
       const entries = list.getEntries();
       const firstEntry = entries[0];
 
-      if (import.meta.env.DEV) {
-        console.log(
-          `📊 [Core Web Vitals] FID: ${(firstEntry as any).processingStart - firstEntry.startTime}ms`
-        );
-      }
+      if (isFirstInputEntry(firstEntry)) {
+        const fid = firstEntry.processingStart - firstEntry.startTime;
 
-      const fid = (firstEntry as any).processingStart - firstEntry.startTime;
+        if (import.meta.env.DEV) {
+          console.log(`📊 [Core Web Vitals] FID: ${fid.toFixed(2)}ms`);
+        }
 
-      // 100ms以上は改善が必要
-      if (fid > 100) {
-        console.warn(`⚠️ [Core Web Vitals] Poor FID: ${fid}ms`);
+        // 100ms以上は改善が必要
+        if (fid > 100) {
+          console.warn(`⚠️ [Core Web Vitals] Poor FID: ${fid}ms`);
+        }
       }
     });
 
